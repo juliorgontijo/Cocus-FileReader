@@ -1,22 +1,30 @@
-﻿using FileReader.Strategy;
+﻿using FileReader.Strategies;
 
 namespace FileReader
 {
 
     public class FileReaderContext
     {
-        private readonly Dictionary<string, IFileReaderStrategy> _strategies;
+        private readonly Dictionary<string, Func<bool, IFileReaderStrategy>> _strategyFactories;
 
         public FileReaderContext()
         {
-            _strategies = new Dictionary<string, IFileReaderStrategy>
+            _strategyFactories = new Dictionary<string, Func<bool, IFileReaderStrategy>>
         {
-            { ".txt", new TextFileReader() },
-            { ".xml", new XmlFileReader() }
+            {
+                ".txt", isEncrypted =>
+                {
+                    if (isEncrypted)
+                        return new EncryptedTextFileReader(new ReverseDecryptionStrategy());
+                    else
+                        return new TextFileReader();
+                }
+            },
+            { ".xml", _ => new XmlFileReader() }
         };
         }
 
-        public void ReadFile(string filePath)
+        public void ReadFile(string filePath, bool isEncrypted = false)
         {
             if (!File.Exists(filePath))
             {
@@ -26,8 +34,9 @@ namespace FileReader
 
             string extension = Path.GetExtension(filePath).ToLowerInvariant();
 
-            if (_strategies.TryGetValue(extension, out IFileReaderStrategy strategy))
+            if (_strategyFactories.TryGetValue(extension, out var strategyFactory))
             {
+                var strategy = strategyFactory(isEncrypted);
                 strategy.Read(filePath);
             }
             else
@@ -36,5 +45,4 @@ namespace FileReader
             }
         }
     }
-
 }

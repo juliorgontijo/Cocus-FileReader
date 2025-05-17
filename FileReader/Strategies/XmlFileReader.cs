@@ -1,4 +1,4 @@
-﻿using FileReader.Strategy;
+﻿using FileReader.Strategies;
 using System;
 using System.Xml.Linq;
 

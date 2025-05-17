@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileReader.Strategy
+namespace FileReader.Strategies
 {
     public interface IFileReaderStrategy
     {
