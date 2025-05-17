@@ -22,11 +22,17 @@ namespace FileReader
                 return;
             }
 
-            Console.WriteLine("Is this file encrypted? (y/n):");
-            string encryptedInput = Console.ReadLine();
+            string encryptedInput = "n";
+            string role = "user";
 
-            Console.WriteLine("Enter your role (admin/user):");
-            string role = Console.ReadLine()?.Trim().ToLower() ?? "user";
+            if (extension != ".json")
+            {
+                Console.WriteLine("Is this file encrypted? (y/n):");
+                encryptedInput = Console.ReadLine();
+
+                Console.WriteLine("Enter your role (admin/user):");
+                role = Console.ReadLine()?.Trim().ToLower() ?? "user";                
+            }
             bool isEncrypted = encryptedInput!.Trim().ToLower() == "y";
 
             var securityStrategy = new SimpleRoleBasedSecurityStrategy();

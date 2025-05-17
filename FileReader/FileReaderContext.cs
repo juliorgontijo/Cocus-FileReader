@@ -30,6 +30,9 @@ namespace FileReader
                         ? new EncryptedXmlFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
                         : new XmlFileReader(_securityStrategy, role);
                 }
+            },
+            { 
+                ".json", (isEncrypted, role) => new JsonFileReader() 
             }
         };
         }
