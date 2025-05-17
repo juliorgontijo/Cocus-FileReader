@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileReader.Strategies
+namespace FileReader.Strategies.Security
 {
-    public interface IDecryptionStrategy
+    public interface ISecurityStrategy
     {
-        string Decrypt(string encryptedText);
+        bool CanAccess(string filePath, string role);
     }
-
 }

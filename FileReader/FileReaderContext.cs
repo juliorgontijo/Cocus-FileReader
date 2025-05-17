@@ -1,30 +1,35 @@
-﻿using FileReader.Strategies;
+﻿using FileReader.Strategies.Encryption;
+using FileReader.Strategies.FileReader;
+using FileReader.Strategies.Security;
 
 namespace FileReader
 {
-
     public class FileReaderContext
     {
-        private readonly Dictionary<string, Func<bool, IFileReaderStrategy>> _strategyFactories;
+        private readonly Dictionary<string, Func<bool, string, IFileReaderStrategy>> _strategyFactories;
+        private readonly ISecurityStrategy _securityStrategy;
 
-        public FileReaderContext()
+        public FileReaderContext(ISecurityStrategy securityStrategy)
         {
-            _strategyFactories = new Dictionary<string, Func<bool, IFileReaderStrategy>>
+            _securityStrategy = securityStrategy;
+
+            _strategyFactories = new Dictionary<string, Func<bool, string, IFileReaderStrategy>>
         {
             {
-                ".txt", isEncrypted =>
+                ".txt", (isEncrypted, _) =>
                 {
-                    if (isEncrypted)
-                        return new EncryptedTextFileReader(new ReverseDecryptionStrategy());
-                    else
-                        return new TextFileReader();
+                    return isEncrypted
+                        ? new EncryptedTextFileReader(new ReverseDecryptionStrategy())
+                        : new TextFileReader();
                 }
             },
-            { ".xml", _ => new XmlFileReader() }
+            {
+                ".xml", (_, role) => new XmlFileReader(_securityStrategy, role)
+            }
         };
         }
 
-        public void ReadFile(string filePath, bool isEncrypted = false)
+        public void ReadFile(string filePath, bool isEncrypted = false, string role = "user")
         {
             if (!File.Exists(filePath))
             {
@@ -36,7 +41,7 @@ namespace FileReader
 
             if (_strategyFactories.TryGetValue(extension, out var strategyFactory))
             {
-                var strategy = strategyFactory(isEncrypted);
+                var strategy = strategyFactory(isEncrypted, role);
                 strategy.Read(filePath);
             }
             else

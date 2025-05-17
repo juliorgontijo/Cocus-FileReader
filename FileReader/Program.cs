@@ -1,4 +1,6 @@
-﻿namespace FileReader
+﻿using FileReader.Strategies.Security;
+
+namespace FileReader
 {
     class Program
     {
@@ -21,16 +23,26 @@
             }
 
             string encryptedInput = "n";
-            if (extension == ".txt")
-            {
-                Console.WriteLine("Is this file encrypted? (y/n):");
-                encryptedInput = Console.ReadLine();
-            }
+            string role = "user";
 
+            switch (extension)
+            {
+                case ".txt":
+                    Console.WriteLine("Is this file encrypted? (y/n):");
+                    encryptedInput = Console.ReadLine();
+                    break;
+                case ".xml":
+                    Console.WriteLine("Enter your role (admin/user):");
+                    role = Console.ReadLine()?.Trim().ToLower() ?? "user";
+                    break;
+                default:
+                    break;
+            }
             bool isEncrypted = encryptedInput!.Trim().ToLower() == "y";
 
-            var context = new FileReaderContext();
-            context.ReadFile(filePath, isEncrypted);
+            var securityStrategy = new SimpleRoleBasedSecurityStrategy();
+            var context = new FileReaderContext(securityStrategy);
+            context.ReadFile(filePath, isEncrypted, role);
 
             Console.WriteLine("\nPress any key to exit...");
             Console.ReadKey();

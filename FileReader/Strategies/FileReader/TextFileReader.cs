@@ -1,4 +1,4 @@
-﻿using FileReader.Strategies;
+﻿using FileReader.Strategies.FileReader;
 using System.Text;
 
 public class TextFileReader : IFileReaderStrategy

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FileReader.Strategies
+namespace FileReader.Strategies.Encryption
 {
     public class ReverseDecryptionStrategy : IDecryptionStrategy
     {

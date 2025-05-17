@@ -1,4 +1,6 @@
-﻿namespace FileReader.Strategies
+﻿using FileReader.Strategies.FileReader;
+
+namespace FileReader.Strategies.Encryption
 {
     public class EncryptedTextFileReader : IFileReaderStrategy
     {
