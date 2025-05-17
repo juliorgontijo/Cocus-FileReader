@@ -1,32 +1,17 @@
-﻿using System;
-using System.IO;
-
-namespace FileReader
+﻿namespace FileReader
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter the full path of the text file to read:");
+            Console.WriteLine("Enter the full path of the file to read (.txt or .xml):");
             string filePath = Console.ReadLine();
 
-            if (File.Exists(filePath))
-            {
-                try
-                {
-                    string contents = File.ReadAllText(filePath);
-                    Console.WriteLine("\n--- File Contents ---");
-                    Console.WriteLine(contents);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error reading the file: {ex.Message}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("The specified file does not exist.");
-            }
+            var context = new FileReaderContext();
+            context.ReadFile(filePath);
+
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
         }
     }
 }
