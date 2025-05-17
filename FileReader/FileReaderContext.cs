@@ -16,15 +16,15 @@ namespace FileReader
             _strategyFactories = new Dictionary<string, Func<bool, string, IFileReaderStrategy>>
         {
             {
-                ".txt", (isEncrypted, _) =>
+                ".txt", (isEncrypted, role) =>
                 {
                     return isEncrypted
-                        ? new EncryptedTextFileReader(new ReverseDecryptionStrategy())
-                        : new TextFileReader();
+                        ? new EncryptedTextFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
+                        : new TextFileReader(_securityStrategy, role);
                 }
             },
             {
-              ".xml", (isEncrypted, role) =>
+                ".xml", (isEncrypted, role) =>
                 {
                     return isEncrypted
                         ? new EncryptedXmlFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
