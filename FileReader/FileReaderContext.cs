@@ -31,10 +31,13 @@ namespace FileReader
                         : new XmlFileReader(_securityStrategy, role);
                 }
             },
-            { 
-                ".json", (isEncrypted, role) => new JsonFileReader() 
-            }
-        };
+            {  
+                ".json", (isEncrypted, role) =>
+                    isEncrypted
+                        ? new EncryptedJsonFileReader(new ReverseDecryptionStrategy())
+                        : new JsonFileReader()
+                }
+            };
         }
 
         public void ReadFile(string filePath, bool isEncrypted = false, string role = "user")

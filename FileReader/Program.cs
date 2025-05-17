@@ -22,13 +22,12 @@ namespace FileReader
                 return;
             }
 
-            string encryptedInput = "n";
-            string role = "user";
+            Console.WriteLine("Is this file encrypted? (y/n):");
+            string encryptedInput = Console.ReadLine();
 
+            string role = "user";
             if (extension != ".json")
             {
-                Console.WriteLine("Is this file encrypted? (y/n):");
-                encryptedInput = Console.ReadLine();
 
                 Console.WriteLine("Enter your role (admin/user):");
                 role = Console.ReadLine()?.Trim().ToLower() ?? "user";                
