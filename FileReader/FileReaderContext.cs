@@ -14,28 +14,30 @@ namespace FileReader
             _securityStrategy = securityStrategy;
 
             _strategyFactories = new Dictionary<string, Func<bool, string, IFileReaderStrategy>>
-        {
             {
-                ".txt", (isEncrypted, role) =>
                 {
-                    return isEncrypted
-                        ? new EncryptedTextFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
-                        : new TextFileReader(_securityStrategy, role);
-                }
-            },
-            {
-                ".xml", (isEncrypted, role) =>
+                    ".txt", (isEncrypted, role) =>
+                    {
+                        return isEncrypted
+                            ? new EncryptedTextFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
+                            : new TextFileReader(_securityStrategy, role);
+                    }
+                },
                 {
-                    return isEncrypted
-                        ? new EncryptedXmlFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
-                        : new XmlFileReader(_securityStrategy, role);
-                }
-            },
-            {  
-                ".json", (isEncrypted, role) =>
-                    isEncrypted
-                        ? new EncryptedJsonFileReader(new ReverseDecryptionStrategy())
-                        : new JsonFileReader()
+                    ".xml", (isEncrypted, role) =>
+                    {
+                        return isEncrypted
+                            ? new EncryptedXmlFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
+                            : new XmlFileReader(_securityStrategy, role);
+                    }
+                },
+                {
+                    ".json", (isEncrypted, role) =>
+                     {
+                        return isEncrypted
+                            ? new EncryptedJsonFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
+                            : new JsonFileReader(_securityStrategy, role);
+                    }
                 }
             };
         }

@@ -1,6 +1,5 @@
 ﻿using FileReader.Strategies.FileReader;
 using FileReader.Strategies.Security;
-using System.Xml.Linq;
 
 namespace FileReader.Strategies.Encryption
 {
@@ -19,17 +18,17 @@ namespace FileReader.Strategies.Encryption
 
         public void Read(string filePath)
         {
-            if (!_securityStrategy.CanAccess(filePath, _role))
-            {
-                Console.WriteLine("Access denied.");
-                return;
-            }
-
-            string encryptedContent = File.ReadAllText(filePath);
-            string decryptedContent = _decryptionStrategy.Decrypt(encryptedContent);
-
             try
             {
+                if (!_securityStrategy.CanAccess(filePath, _role))
+                {
+                    Console.WriteLine("Access denied.");
+                    return;
+                }
+
+                string encryptedContent = File.ReadAllText(filePath);
+                string decryptedContent = _decryptionStrategy.Decrypt(encryptedContent);
+
                 Console.WriteLine("--- Decrypted XML File Contents ---");
                 Console.WriteLine(decryptedContent);
             }
