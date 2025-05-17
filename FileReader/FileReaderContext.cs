@@ -24,7 +24,12 @@ namespace FileReader
                 }
             },
             {
-                ".xml", (_, role) => new XmlFileReader(_securityStrategy, role)
+              ".xml", (isEncrypted, role) =>
+                {
+                    return isEncrypted
+                        ? new EncryptedXmlFileReader(new ReverseDecryptionStrategy(), _securityStrategy, role)
+                        : new XmlFileReader(_securityStrategy, role);
+                }
             }
         };
         }

@@ -22,21 +22,14 @@ namespace FileReader
                 return;
             }
 
-            string encryptedInput = "n";
-            string role = "user";
+            Console.WriteLine("Is this file encrypted? (y/n):");
+            string encryptedInput = Console.ReadLine();
 
-            switch (extension)
+            string role = "user";
+            if (extension == ".xml")
             {
-                case ".txt":
-                    Console.WriteLine("Is this file encrypted? (y/n):");
-                    encryptedInput = Console.ReadLine();
-                    break;
-                case ".xml":
-                    Console.WriteLine("Enter your role (admin/user):");
-                    role = Console.ReadLine()?.Trim().ToLower() ?? "user";
-                    break;
-                default:
-                    break;
+                Console.WriteLine("Enter your role (admin/user):");
+                role = Console.ReadLine()?.Trim().ToLower() ?? "user";
             }
             bool isEncrypted = encryptedInput!.Trim().ToLower() == "y";
 
